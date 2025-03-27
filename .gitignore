@@ -1,0 +1,30 @@
+# ignore All .DS_Store
+.DS_Store
+
+# ignore All files in ANY directory named temp
+temp/
+bin/
+obj/
+
+# eclispse
+bin
+*.launch
+.settings
+.metadata
+.classpath
+.project
+
+# idea
+out
+*.ipr
+*.iws
+*.iml
+.idea
+
+# gradle
+build
+.gradle
+# other
+eclipse
+run
+
