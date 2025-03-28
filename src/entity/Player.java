@@ -8,20 +8,24 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-
 public class Player extends Entity {
-
     GamePanel gp;
     KeyHandler keyH;
+    public final int screenX;
+    public final int screenY;
+
     public Player(GamePanel gp, KeyHandler keyH){
         this.gp = gp;
         this.keyH =keyH;
+        screenX = (gp.screenWidth/2) - (gp.tileSize/2);
+        screenY = (gp.screenHeight/2) - (gp.tileSize/2);
         setDefaultValues();
         getPlayImage();
     }
     public void setDefaultValues(){
-        x = 100;
-        y = 100;
+        // Starting position of charactor
+        worldX = gp.tileSize * 23;
+        worldY = gp.tileSize * 21;
         speed = 4;
         direction = "down";
     }
@@ -41,23 +45,21 @@ public class Player extends Entity {
     }
     public void update(){
         // In JAVA, (0,0) is the top left corner.
-
         if(keyH.upPressed == true || keyH.downPressed == true || keyH.rightPressed == true || keyH.leftPressed == true){
 
             if( keyH.upPressed == true ){
                 direction = "up";
-                y -= speed;
+                worldY -= speed;
             }else if( keyH.downPressed == true ){
                 direction = "down";
-                y += speed;
+                worldY += speed;
             }else if( keyH.leftPressed == true ){
                 direction = "left";
-                x -= speed;
+                worldX -= speed;
             }else if( keyH.rightPressed == true ){
                 direction = "right";
-                x += speed;
+                worldX += speed;
             }
-
             spriteCounter++;
             //this mean player image change every 15 frames
             if(spriteCounter > 15){
@@ -69,12 +71,11 @@ public class Player extends Entity {
                 spriteCounter = 0;
             }
         }
-
     }
     public void draw(Graphics2D g2){
-        //test - draw a white square
-        //g2.setColor(Color.white);
-        //g2.fillRect(x, y, gp.tileSize,gp.tileSize);
+        // test - draw a white square
+        // g2.setColor(Color.white);
+        // g2.fillRect(x, y, gp.tileSize,gp.tileSize);
 
         BufferedImage image = null;
         switch(direction){
@@ -107,8 +108,6 @@ public class Player extends Entity {
                 }
                 break;
         }
-        g2.drawImage(image, x, y, gp.tileSize, gp.tileSize, null);
-
+        g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
     }
-
 }
