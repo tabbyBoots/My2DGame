@@ -1,5 +1,4 @@
 package object;
-
 import main.GamePanel;
 
 import java.awt.*;
