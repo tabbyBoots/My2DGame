@@ -9,7 +9,7 @@ public class KeyHandler implements KeyListener {
     public void keyTyped(KeyEvent e) {}
     @Override
     public void keyPressed(KeyEvent e) {
-        int code = e.getKeyCode(); // return the integer of the key
+        int code = e.getKeyCode(); // Return the integer of the key
         if( code == KeyEvent.VK_W ){
             upPressed = true;
         }

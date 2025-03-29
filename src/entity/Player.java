@@ -1,5 +1,4 @@
 package entity;
-
 import main.GamePanel;
 import main.KeyHandler;
 
@@ -13,6 +12,7 @@ public class Player extends Entity {
     KeyHandler keyH;
     public final int screenX;
     public final int screenY;
+    int hasKey = 0;
 
     public Player(GamePanel gp, KeyHandler keyH){
         this.gp = gp;
@@ -20,14 +20,15 @@ public class Player extends Entity {
         screenX = (gp.screenWidth/2) - (gp.tileSize/2);
         screenY = (gp.screenHeight/2) - (gp.tileSize/2);
 
-        // make solidArea smaller than player tile to make it easier to avoid collision
+        // Make solidArea smaller than player tile to make it easier to avoid collision
         solidArea = new Rectangle(8,16, 32, 32);
-
+        solidAreaDefaultX = solidArea.x;
+        solidAreaDefaultY = solidArea.y;
         setDefaultValues();
         getPlayImage();
     }
     public void setDefaultValues(){
-        // Starting position of charactor
+        // Starting position of character
         worldX = gp.tileSize * 23;
         worldY = gp.tileSize * 21;
         speed = 4;
@@ -61,9 +62,15 @@ public class Player extends Entity {
             }else if( keyH.rightPressed == true ){
                 direction = "right";
             }
+
             // Check Tile Collision
             collisionOn = false;
             gp.cChecker.checkTile(this);
+
+            // Check Object Collision
+            int objIndex = gp.cChecker.checkObject(this, true);
+            pickUpObject(objIndex);
+
             // If Collision is False, Player can move
             if(collisionOn == false){
                 switch(direction){
@@ -75,7 +82,7 @@ public class Player extends Entity {
             }
 
             spriteCounter++;
-            //this mean player image change every 15 frames
+            //This mean player image change every 15 frames
             if(spriteCounter > 15){
                 if(spriteNum == 1){
                     spriteNum = 2;
@@ -87,12 +94,32 @@ public class Player extends Entity {
         }
 
 
-
-
-
     }
+
+    public void pickUpObject(int i){
+        if(i != 999){
+            // i = 999 means the player didn't touch the object
+            // gp.obj[i] = null;// This mean the object will be deleted upon collision with the player.
+            String objectName = gp.obj[i].name;
+            switch(objectName){
+                case "Key":
+                    hasKey++;
+                    gp.obj[i] = null;
+                    System.out.println("Key: " + hasKey);
+                    break;
+                case "Door":
+                    if( hasKey > 0 ){
+                        gp.obj[i] = null;
+                        hasKey--;
+                    }
+                    System.out.println("Key: " + hasKey);
+                    break;
+            }
+        }
+    }
+
     public void draw(Graphics2D g2){
-        // test - draw a white square
+        // Test - draw a white square
         // g2.setColor(Color.white);
         // g2.fillRect(x, y, gp.tileSize,gp.tileSize);
 
