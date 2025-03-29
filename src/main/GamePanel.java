@@ -1,6 +1,7 @@
 package main;
 
 import entity.Player;
+import object.SuperObject;
 import tile.TileManager;
 
 import javax.swing.*;
@@ -31,7 +32,11 @@ public class GamePanel extends JPanel implements Runnable{
     KeyHandler keyH = new KeyHandler();
     Thread gameThread; // In order to repeat the process, also require to implement Runnable
     public CollisionChecker cChecker = new CollisionChecker(this);
+    public AssetSetter aSetter = new AssetSetter(this);
     public Player player = new Player(this, keyH);
+    public SuperObject obj[] = new SuperObject[10];
+
+
 
     public GamePanel(){
         this.setPreferredSize(new Dimension(screenWidth, screenHeight)); // The size of this class, which is JPanel
@@ -40,6 +45,10 @@ public class GamePanel extends JPanel implements Runnable{
         this.addKeyListener(keyH);
         this.setFocusable(true); // focus on GamePanel to get key input
     }
+    public void setupGame(){
+        aSetter.setObject();
+    }
+
     public void startGameThread(){
         gameThread = new Thread(this);
         gameThread.start(); // automatically call run() method
@@ -113,7 +122,16 @@ public class GamePanel extends JPanel implements Runnable{
     public void paintComponent(Graphics g){
         super.paintComponent(g); // draw object on the screen
         Graphics2D g2 = (Graphics2D)g;
+        // TILE
         tileM.draw(g2);
+        // OBJECT
+
+        for(int i = 0; i < obj.length; i++){
+            if( obj[i] != null ){
+                obj[i].draw(g2, this);
+            }
+        }
+        // PLAYER
         player.draw(g2);
         g2.dispose();// to save some memory
     }
