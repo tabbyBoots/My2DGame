@@ -19,6 +19,10 @@ public class Player extends Entity {
         this.keyH =keyH;
         screenX = (gp.screenWidth/2) - (gp.tileSize/2);
         screenY = (gp.screenHeight/2) - (gp.tileSize/2);
+
+        // make solidArea smaller than player tile to make it easier to avoid collision
+        solidArea = new Rectangle(8,16, 32, 32);
+
         setDefaultValues();
         getPlayImage();
     }
@@ -45,21 +49,31 @@ public class Player extends Entity {
     }
     public void update(){
         // In JAVA, (0,0) is the top left corner.
-        if(keyH.upPressed == true || keyH.downPressed == true || keyH.rightPressed == true || keyH.leftPressed == true){
+        if(keyH.upPressed == true || keyH.downPressed == true ||
+            keyH.rightPressed == true || keyH.leftPressed == true){
 
             if( keyH.upPressed == true ){
                 direction = "up";
-                worldY -= speed;
             }else if( keyH.downPressed == true ){
                 direction = "down";
-                worldY += speed;
             }else if( keyH.leftPressed == true ){
                 direction = "left";
-                worldX -= speed;
             }else if( keyH.rightPressed == true ){
                 direction = "right";
-                worldX += speed;
             }
+            // Check Tile Collision
+            collisionOn = false;
+            gp.cChecker.checkTile(this);
+            // If Collision is False, Player can move
+            if(collisionOn == false){
+                switch(direction){
+                    case "up": worldY -= speed; break;
+                    case "down": worldY += speed; break;
+                    case "left": worldX -= speed; break;
+                    case "right": worldX += speed; break;
+                }
+            }
+
             spriteCounter++;
             //this mean player image change every 15 frames
             if(spriteCounter > 15){
@@ -71,6 +85,11 @@ public class Player extends Entity {
                 spriteCounter = 0;
             }
         }
+
+
+
+
+
     }
     public void draw(Graphics2D g2){
         // test - draw a white square

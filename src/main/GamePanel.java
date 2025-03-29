@@ -30,8 +30,8 @@ public class GamePanel extends JPanel implements Runnable{
     TileManager tileM = new TileManager(this);
     KeyHandler keyH = new KeyHandler();
     Thread gameThread; // In order to repeat the process, also require to implement Runnable
+    public CollisionChecker cChecker = new CollisionChecker(this);
     public Player player = new Player(this, keyH);
-
 
     public GamePanel(){
         this.setPreferredSize(new Dimension(screenWidth, screenHeight)); // The size of this class, which is JPanel
@@ -117,5 +117,4 @@ public class GamePanel extends JPanel implements Runnable{
         player.draw(g2);
         g2.dispose();// to save some memory
     }
-
 }
